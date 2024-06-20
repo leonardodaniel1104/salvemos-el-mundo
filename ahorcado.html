@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego de Ahorcado</title>
+    <style>
+   body{
+    background-color: rgb(235, 226, 184);
+}
+
+.container {
+
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+#palabra-container {
+    margin-top: 20px;
+    font-size: 27px;
+}
+
+#teclado-container {
+    margin-top: 20px;
+}
+
+.tecla {
+    display: inline-block;
+    margin: 15px;
+    padding: 25px;
+    font-size: 16px;
+    cursor: pointer;
+    font-family: 'Times New Roman', Times, serif;
+}
+.h1{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Juego de Ahorcado🌱</h1>
+        <div id="palabra-container"></div>
+        <div id="intentos-container">
+            <p>Intentos restantes: <span id="intentos">6</span></p>
+        </div>
+        <div id="teclado-container"></div>
+        <button id="reiniciar" onclick="reiniciarJuego()">Reiniciar</button>
+        <a href="index.html"><center><button>salir</button></center></a>
+    </div>
+    <script>
+        
+const palabras = ["REFORESTACION", "RECICLAJE", "BIODIVERSIDAD", "CONTAMINACION", "ENERGIA", "SOSTENIBILIDAD", "ECOSISTEMA", "CONSERVACION", "REUTILIZAR"];
+
+let palabraSecreta = '';
+let palabraAdivinada = '';
+let intentosRestantes = 6;
+
+
+function seleccionarPalabra() {
+    palabraSecreta = palabras[Math.floor(Math.random() * palabras.length)];
+    palabraAdivinada = '_'.repeat(palabraSecreta.length);
+}
+
+
+function iniciarJuego() {
+    seleccionarPalabra();
+    mostrarPalabra();
+    mostrarTeclado();
+}
+
+
+function mostrarPalabra() {
+    document.getElementById('palabra-container').textContent = palabraAdivinada;
+}
+
+function mostrarTeclado() {
+    const tecladoContainer = document.getElementById('teclado-container');
+    tecladoContainer.innerHTML = '';
+    for (let letra of 'ABCDEFGHIJKLMNOPQRSTUVWXYZ') {
+        const tecla = document.createElement('span');
+        tecla.textContent = letra;
+        tecla.className = 'tecla';
+        tecla.addEventListener('click', function() {
+            verificarLetra(letra);
+            this.style.visibility = 'hidden';
+        });
+        tecladoContainer.appendChild(tecla);
+    }
+}
+
+
+function verificarLetra(letra) {
+    if (palabraSecreta.includes(letra)) {
+        for (let i = 0; i < palabraSecreta.length; i++) {
+            if (palabraSecreta[i] === letra) {
+                palabraAdivinada = palabraAdivinada.substr(0, i) + letra + palabraAdivinada.substr(i + 1);
+            }
+        }
+        mostrarPalabra();
+        if (palabraAdivinada === palabraSecreta) {
+            ganarJuego();
+        }
+    } else {
+        intentosRestantes--;
+        document.getElementById('intentos').textContent = intentosRestantes;
+        if (intentosRestantes === 0) {
+            perderJuego();
+        }
+    }
+}
+
+
+function reiniciarJuego() {
+    intentosRestantes = 6;
+    document.getElementById('intentos').textContent = intentosRestantes;
+    iniciarJuego();
+}
+
+
+function ganarJuego() {
+    alert('¡Felicidades! ¡Has ganado!');
+    reiniciarJuego();
+}
+
+
+function perderJuego() {
+    alert('¡Oh no! ¡Has perdido! La palabra secreta era: ' + palabraSecreta);
+    reiniciarJuego();
+}
+
+
+window.onload = iniciarJuego;
+    </script>
+</body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Educacion Ambiental</title>
+    <style>
+        #game-container {
+    background: linear-gradient(45deg, #fbf5b6f4, #a1e48fc9);
+    text-align: center;
+    font-size: 55px;
+    
+}
+#question {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 45px;
+    margin-bottom: 40px;
+}
+
+#options {
+    display: inline-block;
+    margin-bottom: 30px;
+}
+
+.option {
+    font-family: 'Times New Roman', Times, serif;
+    display: inline-block;
+    margin-right: 10px;
+    cursor: pointer;
+    padding: 10px 10px;
+    border: 10px solid #9de08c;
+    background-color: #c6e3ce;
+}
+
+.option:hover {
+    background-color: #d2f4caa1;
+}
+
+#result {
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+.next-button{
+    font-family: 'Times New Roman', Times, serif;
+    margin-bottom: 30px;
+    display: flex;
+    margin-top: 20px;
+    justify-content: center;
+}
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <h1>🌵Pequeño cuestionario🌵</h1>
+        <div id="question"></div>
+        <div id="options"></div>
+        <button id="next-button">SIGUIENTE</button>
+        <a href="index.html"><center><button>INICIO</button></center></a>
+        <div id="result"></div>
+       
+    </div>
+    <script>
+        const questions = [
+    {
+        question: "CUÁL ES EL PRINCIPAL GAS DE EFECTO INVERNADERO RESPONSABLE DEL CALENTAMIENTO GLOBAL?",
+        options: ["Dióxido de carbono", "Oxígeno", "Nitrogeno", "Metano"],
+        answer: "Dióxido de carbono"
+    },
+    {
+        question: "QUÉ ACTIVIDAD HUMANA CONTRIBUYE EN GRAN MEDIDA AL CAMBIO CLIMATICO?",
+        options: ["Reciclaje", "Deforestación", "Plantar árboles", "Usar energía renovable"],
+        answer: "Deforestación"
+    },
+    {
+        question: "CUÁL ES LA MAYOR CAUSA DE LA DEFORESTACIÓN?",
+        options: ["Agricultura", "Petróleo", "Contaminación", "Construcción"],
+        answer: "Agricultura"
+    },
+    {
+        question: "¿CUÁL DE LAS SIGUIENTES ES UNA ENERGÍA RENOVABLE?",
+        options: ["Carbón", "Petróleo", "Energía Solar", "Gas Natural"],
+        answer: "Energía Solar"
+    },
+    {
+        question: "¿Qué es lo que NO tenemos que hacer para cuidar el medio ambiente?",
+        options: ["REUTILIZAR BOLSAS DE PLASTICO", "TIRAR BASURA EN LUGARES PÚBLICOS", "AHORRAR AGUA", "ANDAR EN BICICLETA"],
+        answer: "TIRAR BASURA EN LUGARES PÚBLICOS"
+
+    },
+    {
+        question: "¿como afecta la contaminacion al suelo?",
+        options: ["reduce la materia orgánica", "se mueren los animales", "produce olores desagradables", "daña las plantas"],
+        answer: "reduce la materia orgánica"
+    },
+    {
+        question: "¿Qué se puede hacer para recuperar las selvas deforestadas?",
+        options: ["afectar la materia orgánica", "tirar la basura", "restablecer el equilibrio de los beneficios ecológicos", "regar la selva"],
+        answer: "restablecer el equilibrio de los beneficios ecológicos"
+    },
+    {
+        question: "¿Qué es la deforestación por agricultura?",
+        options: ["es la tala y quema de arboles", "es la daño de animales", "es un proceso de crecimiento", "es un adaño a la gente"],
+        answer: "es la tala y quema de arboles"
+    },
+];
+
+let currentQuestionIndex = 0;
+let score = 0;
+
+const questionElement = document.getElementById("question");
+const optionsElement = document.getElementById("options");
+const nextButton = document.getElementById("next-button");
+const resultElement = document.getElementById("result");
+
+function displayQuestion() {
+    const currentQuestion = questions[currentQuestionIndex];
+    questionElement.textContent = currentQuestion.question;
+    optionsElement.innerHTML = "";
+    currentQuestion.options.forEach(option => {
+        const optionElement = document.createElement("div");
+        optionElement.classList.add("option");
+        optionElement.textContent = option;
+        optionElement.addEventListener("click", () => {
+            checkAnswer(option);
+        });
+        optionsElement.appendChild(optionElement);
+    });
+}
+
+function checkAnswer(selectedOption) {
+    const currentQuestion = questions[currentQuestionIndex];
+    if (selectedOption === currentQuestion.answer) {
+        score++;
+        resultElement.textContent = "Correcto!🥰";
+    } else {
+        resultElement.textContent = "Incorrecto!🥺";
+    }
+    disableOptions();
+    nextButton.disabled = false;
+}
+
+function disableOptions() {
+    const optionElements = document.querySelectorAll(".option");
+    optionElements.forEach(option => {
+        option.classList.add("disabled");
+        option.removeEventListener("click", checkAnswer);
+    });
+}
+
+function nextQuestion() {
+    currentQuestionIndex++;
+    if (currentQuestionIndex < questions.length) {
+        displayQuestion();
+        nextButton.disabled = true;
+        resultElement.textContent = "";
+    } else {
+        showResult();
+    }
+}
+
+function showResult() {
+    questionElement.textContent = "COMPLETADO🌎";
+    optionsElement.innerHTML = "";
+    resultElement.textContent = `Tu resultado es: ${score} / ${questions.length}`;
+    nextButton.style.display = "none";
+}
+
+nextButton.addEventListener("click", nextQuestion);
+
+displayQuestion();
+
+    </script>
+</body>
+</html>
